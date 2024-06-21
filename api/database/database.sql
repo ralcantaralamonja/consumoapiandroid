@@ -6,14 +6,14 @@ CREATE TABLE autor (
     nombre VARCHAR(100) NOT NULL,
     nacionalidad VARCHAR(50),
     fecha_nacimiento DATE,
-    biografia TEXT
+    biografia varchar(150)
 );
 
 CREATE TABLE libro (
     id INT AUTO_INCREMENT PRIMARY KEY,
     titulo VARCHAR(200) NOT NULL,
     publicacion YEAR,
-    sinopsis TEXT
+    sinopsis varchar(150)
 );
 
 CREATE TABLE categoria (
