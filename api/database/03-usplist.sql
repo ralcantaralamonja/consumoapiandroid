@@ -15,9 +15,9 @@ BEGIN
     SELECT  id , nombre FROM categoria;
 END$$
 
-CREATE PROCEDURE usp_ListarCategoria()
+CREATE PROCEDURE usp_ListarLibroCategoria()
 BEGIN
- SELECT L.titulo 'Libro',C.nombre 'Categoria' FROM 
+    SELECT L.titulo 'Libro',C.nombre 'Categoria' FROM 
 libro_categoria AS LC
 INNER JOIN libro AS L ON L.id = LC.libro_id
 INNER JOIN categoria AS C ON C.id = LC.categoria_id
