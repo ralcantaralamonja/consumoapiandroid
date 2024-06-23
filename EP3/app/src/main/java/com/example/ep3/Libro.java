@@ -26,13 +26,13 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Autor extends AppCompatActivity {
+public class Libro extends AppCompatActivity {
 
     Button btnAgregar = (Button) findViewById(R.id.btnAgregarAutor);
-    EditText txtIDAutor = (EditText) findViewById(R.id.txtIDAutor), txtNombreAutor = (EditText) findViewById(R.id.txtNombreAutor),
-            txtNacionalidad = (EditText) findViewById(R.id.txtNacionalidad),
-            txtFechaAutor = (EditText) findViewById(R.id.txtfechaAutor),
-            txtBiografiaAutor = (EditText) findViewById(R.id.txtBiografiaAutor);
+    EditText txtIDLibro = (EditText) findViewById(R.id.txtIDLibro),
+            txtTituloLibro = (EditText) findViewById(R.id.txtTituloLibro),
+            txtAutor = (EditText) findViewById(R.id.txtAutorLibro),
+            txtFechaPublicacion = (EditText) findViewById(R.id.txtfechaPublicacion);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,11 +46,11 @@ public class Autor extends AppCompatActivity {
         btnAgregar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AgregarAutor();
+                AgregarLibro();
             }
         });
     }
-    void AgregarAutor(){
+    void AgregarLibro(){
         String url = "XX";
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
@@ -61,7 +61,7 @@ public class Autor extends AppCompatActivity {
                             JSONObject jso = new JSONObject(response);
                             String mensaje = jso.getString("mensaje");
                             Toast.makeText(getApplicationContext(), mensaje, Toast.LENGTH_LONG).show();
-                            if (mensaje.equals("Autor Registrado Ok")){
+                            if (mensaje.equals("Libro Registrado Ok")){
                                 finish();
                             }
                         } catch (Exception e) {
@@ -81,11 +81,10 @@ public class Autor extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String,String> prms = new HashMap<String,String>();
-                prms.put("ID",txtIDAutor.getText().toString());
-                prms.put("Nombre",txtNombreAutor.getText().toString());
-                prms.put("Nacionalidad",txtNacionalidad.getText().toString());
-                prms.put("Fecha",txtFechaAutor.getText().toString());
-                prms.put("Biografia",txtBiografiaAutor.getText().toString());
+                prms.put("ID",txtIDLibro.getText().toString());
+                prms.put("Titulo",txtTituloLibro.getText().toString());
+                prms.put("Autor",txtAutor.getText().toString());
+                prms.put("Fecha_Publicacion",txtFechaPublicacion.getText().toString());
                 return prms;
             }
         };

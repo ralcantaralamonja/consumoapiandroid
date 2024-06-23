@@ -32,7 +32,7 @@ import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
-    ListView lstAutor = (ListView) findViewById(id.lstAutor);
+    ListView lstLibro = (ListView) findViewById(id.lstLibro);
     Button btnMantenimiento = (Button) findViewById(id.btnMantenimiento);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,16 +44,16 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        MostrarAutores();
+        MostrarLibros();
         btnMantenimiento.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), Autor.class);
+                Intent intent = new Intent(getApplicationContext(), Libro.class);
                 startActivity(intent);
             }
         });
     }
-    void MostrarAutores(){
+    void MostrarLibros(){
         String url ="xx";
         RequestQueue requestQueue = Volley.newRequestQueue(this);
 
@@ -78,23 +78,22 @@ public class MainActivity extends AppCompatActivity {
             //Verificamos que existan datos
             if(!response.isEmpty()){
                 jso = new JSONObject(response);
-                jsa = jso.getJSONArray("autor");
+                jsa = jso.getJSONArray("libro");
                 ArrayList<HashMap<String,String>> arrayList = new ArrayList<>();
                 for (int i = 0 ; i<jsa.length();i++){
                     JSONObject jsonObject = jsa.getJSONObject(i);
                     HashMap<String,String> map = new HashMap<>();
                     map.put("id",jsonObject.getInt("id")+"");
-                    map.put("nombre",jsonObject.getString("nombre")+"");
-                    map.put("nacionalidad",jsonObject.getString("nacionalidad")+"");
-                    map.put("fecha_nacimiento",jsonObject.getString("fecha_nacimiento")+"");
-                    map.put("biografia",jsonObject.getString("biografia")+"");
+                    map.put("titulo",jsonObject.getString("titulo")+"");
+                    map.put("autor",jsonObject.getString("autor")+"");
+                    map.put("Año publicacion",jsonObject.getInt("año_publicacion")+"");
                     arrayList.add(map);
                 }
                 //Creamos un adaptador
-                ListAdapter adapter = new SimpleAdapter(this,arrayList,R.layout.autor_lista,new String[]{"nombre","nacionalidad","fecha_nacimiento","biografia"},
-                        new int[]{R.id.txtnombre,R.id.txtnacionalidad,R.id.txtfecha,R.id.txtbiografia});
+                ListAdapter adapter = new SimpleAdapter(this,arrayList,R.layout.libro_lista,new String[]{"titulo","autor","año_publicacion"},
+                        new int[]{id.txtTituloLibros, id.txtAutorLibros, id.txtAñoPublicacionLibro});
                 //Poblamos el listView de Productos
-                lstAutor.setAdapter(adapter);
+                lstLibro.setAdapter(adapter);
             }       
         }
         catch (Exception er){
@@ -104,6 +103,6 @@ public class MainActivity extends AppCompatActivity {
     // Al regresar de otra actividad volvemos a cargar la Lista de Autores
     @Override protected void onResume() {
         super.onResume();
-        MostrarAutores();
+        MostrarLibros();
     }
 }

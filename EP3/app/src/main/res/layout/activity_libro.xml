@@ -14,10 +14,10 @@
             android:textSize="24dp"
             android:textStyle="bold"
             android:textColor="#009688"
-            android:text="Control de Autor" />
+            android:text="Control de Libros" />
 
         <EditText
-            android:id="@+id/txtIDAutor"
+            android:id="@+id/txtIDLibro"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
@@ -26,7 +26,7 @@
             android:minHeight="48dp" />
 
         <EditText
-            android:id="@+id/txtNombreAutor"
+            android:id="@+id/txtTituloLibro"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
@@ -35,30 +35,21 @@
             android:minHeight="48dp" />
 
         <EditText
-            android:id="@+id/txtNacionalidad"
+            android:id="@+id/txtAutorLibro"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:hint="Nacionalidad"
+            android:hint="Autor"
             android:inputType="text"
             android:minHeight="48dp" />
 
         <EditText
-            android:id="@+id/txtfechaAutor"
+            android:id="@+id/txtfechaPublicacion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:hint="Fecha de nacimiento"
-            android:inputType="text"
-            android:minHeight="48dp" />
-
-        <EditText
-            android:id="@+id/txtBiografiaAutor"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:hint="Biografía"
-            android:inputType="text"
+            android:hint="Año de Publicacion"
+            android:inputType="number"
             android:minHeight="48dp" />
         <LinearLayout
             android:layout_width="match_parent"

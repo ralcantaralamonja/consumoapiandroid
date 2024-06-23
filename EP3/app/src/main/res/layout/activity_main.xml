@@ -19,7 +19,7 @@
             android:textSize="24dp"
             android:textStyle="bold"
             android:textColor="#009688"
-            android:text="Listado de Autores" />
+            android:text="Listado de Libro" />
         <Button
             android:id="@+id/btnMantenimiento"
             android:layout_width="150dp"
@@ -28,7 +28,7 @@
             android:layout_gravity="center"
             android:text="Mantenimiento"/>
         <ListView
-            android:id="@+id/lstAutor"
+            android:id="@+id/lstLibro"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="10dp"
