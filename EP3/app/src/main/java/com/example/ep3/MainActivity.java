@@ -1,6 +1,11 @@
 package com.example.ep3;
 
+import static com.example.ep3.R.*;
+
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -27,7 +32,8 @@ import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
-    ListView lstLibros;
+    ListView lstAutor = (ListView) findViewById(id.lstAutor);
+    Button btnMantenimiento = (Button) findViewById(id.btnMantenimiento);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,8 +44,14 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        lstLibros = (ListView) findViewById(R.id.lstLibros);
         MostrarAutores();
+        btnMantenimiento.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), Autor.class);
+                startActivity(intent);
+            }
+        });
     }
     void MostrarAutores(){
         String url ="xx";
@@ -79,14 +91,19 @@ public class MainActivity extends AppCompatActivity {
                     arrayList.add(map);
                 }
                 //Creamos un adaptador
-                ListAdapter adapter = new SimpleAdapter(this,arrayList,R.layout.libro_lista,new String[]{"nombre","nacionalidad","fecha_nacimiento","biografia"}, 
+                ListAdapter adapter = new SimpleAdapter(this,arrayList,R.layout.autor_lista,new String[]{"nombre","nacionalidad","fecha_nacimiento","biografia"},
                         new int[]{R.id.txtnombre,R.id.txtnacionalidad,R.id.txtfecha,R.id.txtbiografia});
                 //Poblamos el listView de Productos
-                lstLibros.setAdapter(adapter);
+                lstAutor.setAdapter(adapter);
             }       
         }
         catch (Exception er){
                 Toast.makeText(this,er.toString(),Toast.LENGTH_LONG).show();
         }
+    }
+    // Al regresar de otra actividad volvemos a cargar la Lista de Autores
+    @Override protected void onResume() {
+        super.onResume();
+        MostrarAutores();
     }
 }

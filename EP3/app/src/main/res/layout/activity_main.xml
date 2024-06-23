@@ -19,18 +19,20 @@
             android:textSize="24dp"
             android:textStyle="bold"
             android:textColor="#009688"
-            android:text="Listado de Libros" />
+            android:text="Listado de Autores" />
         <Button
-            android:id="@+id/btnRegistrar"
+            android:id="@+id/btnMantenimiento"
             android:layout_width="150dp"
             android:layout_height="50dp"
             android:backgroundTint="#009688"
             android:layout_gravity="center"
-            android:text="Registrar"/>
+            android:text="Mantenimiento"/>
         <ListView
-            android:id="@+id/lstLibros"
+            android:id="@+id/lstAutor"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:choiceMode="singleChoice"/>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
