@@ -13,7 +13,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
@@ -25,7 +25,7 @@ import java.util.Map;
 public class Libro extends AppCompatActivity {
 
     Button btnAgregar;
-    EditText txtIDLibro, txtTituloLibro, txtAutor, txtFechaPublicacion;
+    EditText txtTituloLibro, txtAutor, txtFechaPublicacion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,9 +33,7 @@ public class Libro extends AppCompatActivity {
         setContentView(R.layout.activity_libro);
 
         btnAgregar = findViewById(R.id.btnAgregarLibro);
-        txtIDLibro = findViewById(R.id.txtIDLibro);
         txtTituloLibro = findViewById(R.id.txtTituloLibro);
-        txtTituloLibro =findViewById(R.id.txtTituloLibro);
         txtAutor = findViewById(R.id.txtAutorLibro);
         txtFechaPublicacion = findViewById(R.id.txtfechaPublicacion);
 
@@ -48,16 +46,26 @@ public class Libro extends AppCompatActivity {
     }
 
     void agregarLibro() {
-        String url = "http://192.168.18.12/service/php/agregar_libro.php"; // Asegúrate de cambiar a tu URL correcta
+        String url = "http://192.168.18.12/service/php/agregar.php"; // Cambiar a tu URL correcta
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
+        // Crear un objeto JSON para enviar los datos
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("titulo", txtTituloLibro.getText().toString());
+            jsonObject.put("autor", txtAutor.getText().toString());
+            jsonObject.put("anio", txtFechaPublicacion.getText().toString()); // Debe ser un String, no un int
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        // Crear una solicitud JSON usando Volley
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, jsonObject,
+                new Response.Listener<JSONObject>() {
                     @Override
-                    public void onResponse(String response) {
+                    public void onResponse(JSONObject response) {
                         try {
-                            JSONObject jso = new JSONObject(response);
-                            boolean error = jso.getBoolean("error");
-                            String mensaje = jso.getString("mensaje");
+                            boolean error = response.getBoolean("error");
+                            String mensaje = response.getString("mensaje");
                             Toast.makeText(getApplicationContext(), mensaje, Toast.LENGTH_LONG).show();
                             if (!error) {
                                 // Libro registrado correctamente, puedes realizar acciones adicionales si es necesario
@@ -71,24 +79,13 @@ public class Libro extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                // Error de conexión
                 Toast.makeText(getApplicationContext(), "Error de conexión", Toast.LENGTH_SHORT).show();
             }
-        }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                params.put("id", txtIDLibro.getText().toString());
-                params.put("titulo", txtTituloLibro.getText().toString());
-                params.put("autor", txtAutor.getText().toString());
-                params.put("anio", txtFechaPublicacion.getText().toString()); // Asegúrate de que coincida con el nombre en PHP
-                return params;
-            }
-        };
+        });
 
+        // Agregar la solicitud a la cola de solicitudes
         RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);
+        requestQueue.add(jsonObjectRequest);
     }
-
-
-
 }

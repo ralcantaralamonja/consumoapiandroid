@@ -19,21 +19,20 @@
             android:textSize="24dp"
             android:textStyle="bold"
             android:textColor="#009688"
-            android:text="Listado de Libro" />
+            android:text="Listado de Libros" />
         <Button
             android:id="@+id/btnMantenimiento"
             android:layout_width="150dp"
             android:layout_height="50dp"
             android:backgroundTint="#009688"
             android:layout_gravity="center"
-            android:text="Mantenimiento"/>
-
+            android:text="Agregar libro"/>
         <ListView
             android:id="@+id/lstLibro"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="10dp"
-            android:choiceMode="singleChoice" />
+            android:choiceMode="singleChoice"/>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

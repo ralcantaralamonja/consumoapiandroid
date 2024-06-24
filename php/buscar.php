@@ -12,7 +12,7 @@ if (!$con) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
-// Recuperar los datos del libro a editar desde JSON
+// Recuperar el ID del libro a buscar desde JSON
 $json_data = file_get_contents('php://input');
 
 if (empty($json_data)) {
@@ -33,21 +33,29 @@ if ($data === null) {
     exit;
 }
 
-// Obtener datos del libro desde el array
+// Obtener el ID del libro desde el array
 $id = $data['id'];
-$titulo = $data['titulo'];
-$autor = $data['autor'];
-$anio_publicacion = $data['anio']; // Cambiado a 'anio'
 
-// Consulta SQL para actualizar el libro
-$query = "UPDATE libros SET titulo = '$titulo', autor = '$autor', anio = $anio_publicacion WHERE id = $id";
+// Consulta SQL para buscar el libro por su ID
+$query = "SELECT * FROM libros WHERE id = $id";
 
-if (mysqli_query($con, $query)) {
-    $response['error'] = false;
-    $response['mensaje'] = "Libro actualizado correctamente";
+$result = mysqli_query($con, $query);
+
+if ($result) {
+    if (mysqli_num_rows($result) > 0) {
+        // El libro fue encontrado, obtener los datos
+        $libro = mysqli_fetch_assoc($result);
+        $response['error'] = false;
+        $response['libro'] = $libro;
+    } else {
+        // No se encontró ningún libro con el ID especificado
+        $response['error'] = true;
+        $response['mensaje'] = "No se encontró ningún libro con el ID: $id";
+    }
 } else {
+    // Error en la consulta SQL
     $response['error'] = true;
-    $response['mensaje'] = "Error al actualizar el libro: " . mysqli_error($con);
+    $response['mensaje'] = "Error al buscar el libro: " . mysqli_error($con);
 }
 
 // Enviamos la respuesta en formato JSON

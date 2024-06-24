@@ -12,7 +12,7 @@ if (!$con) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
-// Recuperar los datos del libro a editar desde JSON
+// Recuperar el ID del libro a eliminar desde JSON
 $json_data = file_get_contents('php://input');
 
 if (empty($json_data)) {
@@ -26,28 +26,25 @@ if (empty($json_data)) {
 $data = json_decode($json_data, true);
 
 // Verificar si se pudo decodificar el JSON correctamente
-if ($data === null) {
+if ($data === null || !isset($data['id'])) {
     $response['error'] = true;
-    $response['mensaje'] = "Error al decodificar el JSON";
+    $response['mensaje'] = "Error: Se requiere proporcionar el ID del libro a eliminar";
     echo json_encode($response);
     exit;
 }
 
-// Obtener datos del libro desde el array
+// Obtener el ID del libro desde el array
 $id = $data['id'];
-$titulo = $data['titulo'];
-$autor = $data['autor'];
-$anio_publicacion = $data['anio']; // Cambiado a 'anio'
 
-// Consulta SQL para actualizar el libro
-$query = "UPDATE libros SET titulo = '$titulo', autor = '$autor', anio = $anio_publicacion WHERE id = $id";
+// Consulta SQL para borrar el libro por ID
+$query = "DELETE FROM libros WHERE id = $id";
 
 if (mysqli_query($con, $query)) {
     $response['error'] = false;
-    $response['mensaje'] = "Libro actualizado correctamente";
+    $response['mensaje'] = "Libro eliminado correctamente";
 } else {
     $response['error'] = true;
-    $response['mensaje'] = "Error al actualizar el libro: " . mysqli_error($con);
+    $response['mensaje'] = "Error al eliminar el libro: " . mysqli_error($con);
 }
 
 // Enviamos la respuesta en formato JSON
