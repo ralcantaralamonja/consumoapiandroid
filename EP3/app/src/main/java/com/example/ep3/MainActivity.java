@@ -1,7 +1,5 @@
 package com.example.ep3;
 
-import static com.example.ep3.R.*;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -32,19 +30,28 @@ import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
-    ListView lstLibro = (ListView) findViewById(id.lstLibro);
-    Button btnMantenimiento = (Button) findViewById(id.btnMantenimiento);
+    ListView lstLibro;
+    Button btnMantenimiento;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+
+        // Inicialización de vistas
+        lstLibro = findViewById(R.id.lstLibro);
+        btnMantenimiento = findViewById(R.id.btnMantenimiento);
+
+        // Aplicar insets
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
         MostrarLibros();
+
         btnMantenimiento.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -53,8 +60,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    void MostrarLibros(){
-        String url ="xx";
+
+
+    void MostrarLibros() {
+        String url = "http://172.17.128.1:8080/servicios_rest/biblioteca.php";
         RequestQueue requestQueue = Volley.newRequestQueue(this);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
@@ -65,43 +74,55 @@ public class MainActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                Toast.makeText(getApplicationContext(),volleyError.toString()+"", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), volleyError.toString(), Toast.LENGTH_LONG).show();
             }
-        }
-        );
+        });
+
         requestQueue.add(stringRequest);
     }
-    void LLenarLista(String response){
-        JSONObject jso;
-        JSONArray jsa;
-        try{
-            //Verificamos que existan datos
-            if(!response.isEmpty()){
-                jso = new JSONObject(response);
-                jsa = jso.getJSONArray("libro");
-                ArrayList<HashMap<String,String>> arrayList = new ArrayList<>();
-                for (int i = 0 ; i<jsa.length();i++){
-                    JSONObject jsonObject = jsa.getJSONObject(i);
-                    HashMap<String,String> map = new HashMap<>();
-                    map.put("id",jsonObject.getInt("id")+"");
-                    map.put("titulo",jsonObject.getString("titulo")+"");
-                    map.put("autor",jsonObject.getString("autor")+"");
-                    map.put("Año publicacion",jsonObject.getInt("año_publicacion")+"");
-                    arrayList.add(map);
-                }
-                //Creamos un adaptador
-                ListAdapter adapter = new SimpleAdapter(this,arrayList,R.layout.libro_lista,new String[]{"titulo","autor","año_publicacion"},
-                        new int[]{id.txtTituloLibros, id.txtAutorLibros, id.txtAñoPublicacionLibro});
-                //Poblamos el listView de Productos
-                lstLibro.setAdapter(adapter);
-            }       
-        }
-        catch (Exception er){
-                Toast.makeText(this,er.toString(),Toast.LENGTH_LONG).show();
+
+    void LLenarLista(String response) {
+        try {
+            JSONArray jsa = new JSONArray(response);
+            ArrayList<HashMap<String, String>> arrayList = new ArrayList<>();
+
+            for (int i = 0; i < jsa.length(); i++) {
+                JSONObject jsonObject = jsa.getJSONObject(i);
+
+                // Obtener valores del JSON
+                String id = jsonObject.getString("id");
+                String titulo = jsonObject.getString("titulo");
+                String autor = jsonObject.getString("autor");
+                String añoPublicacion = jsonObject.getString("año_publicacion");
+
+                // Mapear los valores en HashMap
+                HashMap<String, String> map = new HashMap<>();
+                map.put("id", id);
+                map.put("titulo", titulo);
+                map.put("autor", autor);
+                map.put("año_publicacion", añoPublicacion);
+
+                arrayList.add(map);
+            }
+
+            // Crear el adaptador y configurar el ListView
+            ListAdapter adapter = new SimpleAdapter(MainActivity.this, arrayList, R.layout.libro_lista,
+                    new String[]{"titulo", "autor", "año_publicacion"}, // Utiliza las claves correctas del JSON aquí
+                    new int[]{R.id.txtTituloLibros, R.id.txtAutorLibros, R.id.txtAñoPublicacionLibro}); // IDs de los elementos en libro_lista.xml
+
+            lstLibro.setAdapter(adapter);
+
+        } catch (Exception e) {
+            Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
         }
     }
+
+
+
     // Al regresar de otra actividad volvemos a cargar la Lista de Autores
-    @Override protected void onResume() {
+    @Override
+    protected void onResume() {
         super.onResume();
         MostrarLibros();
     }
