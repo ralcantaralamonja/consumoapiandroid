@@ -46,7 +46,7 @@ public class Libro extends AppCompatActivity {
     }
 
     void agregarLibro() {
-        String url = "http://192.168.18.12/service/php/agregar.php"; // Cambiar a tu URL correcta
+        String url = "http://192.168.1.36/servicios/php/agregar.php"; // Cambiar a tu URL correcta
 
         // Crear un objeto JSON para enviar los datos
         JSONObject jsonObject = new JSONObject();

@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -25,7 +26,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
 
     ListView lstLibro;
     Button btnMantenimiento;
+    EditText editTextID;
+    Button btnBuscar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
         // Inicialización de vistas
         lstLibro = findViewById(R.id.lstLibro);
         btnMantenimiento = findViewById(R.id.btnMantenimiento);
+        editTextID = findViewById(R.id.editTextID);
+        btnBuscar = findViewById(R.id.btnDetalles);
 
         // Mostrar lista de libros al iniciar la actividad
         MostrarLibros();
@@ -52,6 +56,20 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), Libro.class);
                 startActivity(intent);
+            }
+        });
+
+        // Configurar clic en el botón de Buscar
+        btnBuscar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String idString = editTextID.getText().toString().trim();
+                if (!idString.isEmpty()) {
+                    int idLibro = Integer.parseInt(idString);
+                    obtenerDetalleLibro(idLibro);
+                } else {
+                    Toast.makeText(MainActivity.this, "Ingrese un ID válido", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -74,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
 
     // Método para obtener la lista de libros desde el servicio web
     void MostrarLibros() {
-        String url = "http://192.168.18.12/service/php/listar.php";
+        String url = "http://192.168.1.36/servicios/php/listar.php";
         RequestQueue requestQueue = Volley.newRequestQueue(this);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
@@ -136,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
 
     // Método para obtener los detalles de un libro específico desde el servicio web
     void obtenerDetalleLibro(int idLibro) {
-        String url = "http://192.168.18.12/service/php/buscar.php";
+        String url = "http://192.168.1.36/servicios/php/buscar.php";
         RequestQueue requestQueue = Volley.newRequestQueue(this);
 
         JSONObject jsonParams = new JSONObject();
@@ -151,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d(TAG, "Respuesta obtener detalles del libro: " + response.toString());
-                        mostrarDetalleLibro(response);
+                        mostrarDetalleLibroEnDetalleActivity(response);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -164,8 +182,8 @@ public class MainActivity extends AppCompatActivity {
         requestQueue.add(jsonObjectRequest);
     }
 
-    // Método para mostrar los detalles del libro seleccionado
-    void mostrarDetalleLibro(JSONObject response) {
+    // Método para mostrar los detalles del libro seleccionado en DetalleLibroActivity
+    void mostrarDetalleLibroEnDetalleActivity(JSONObject response) {
         try {
             Log.d(TAG, "Respuesta JSON detalles del libro: " + response.toString());
             boolean error = response.getBoolean("error");
@@ -180,9 +198,9 @@ public class MainActivity extends AppCompatActivity {
 
                 Log.d(TAG, "Detalles del libro: ID=" + id + ", Título=" + titulo + ", Autor=" + autor + ", Año=" + anio);
 
-                // Mostrar los detalles del libro en una nueva actividad o diálogo
+                // Abrir DetalleLibroActivity y pasar datos del libro
                 Intent intent = new Intent(getApplicationContext(), DetalleLibroActivity.class);
-                intent.putExtra("id", String.valueOf(id)); // Convertir int a String
+                intent.putExtra("id", String.valueOf(id));
                 intent.putExtra("titulo", titulo);
                 intent.putExtra("autor", autor);
                 intent.putExtra("anio", anio);

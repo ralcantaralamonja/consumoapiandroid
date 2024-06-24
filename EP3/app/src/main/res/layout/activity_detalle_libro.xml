@@ -1,45 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/txtId"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="ID"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:layout_margin="16dp"/>
+        android:orientation="vertical"
+        android:padding="16dp"
+        tools:ignore="MissingConstraints">
 
-    <TextView
-        android:id="@+id/txtTitulo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Título"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:layout_below="@id/txtId"
-        android:layout_margin="16dp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="#009688"
+            android:text="Detalles del Libro" />
 
-    <TextView
-        android:id="@+id/txtAutor"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Autor"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:layout_below="@id/txtTitulo"
-        android:layout_margin="16dp"/>
+        <EditText
+            android:id="@+id/txtIdLibro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="ID"
+            android:inputType="number"
+            android:minHeight="48dp"
+            android:enabled="false" />
 
-    <TextView
-        android:id="@+id/txtAnio"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Año de Publicación"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:layout_below="@id/txtAutor"
-        android:layout_margin="16dp"/>
+        <EditText
+            android:id="@+id/txtTituloLibro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="Nombre"
+            android:inputType="text"
+            android:minHeight="48dp"
+            android:enabled="false" />
 
-</RelativeLayout>
+        <EditText
+            android:id="@+id/txtAutorLibro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="Autor"
+            android:inputType="text"
+            android:minHeight="48dp"
+            android:enabled="false" />
+
+        <EditText
+            android:id="@+id/txtfechaPublicacion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="Año de Publicacion"
+            android:inputType="number"
+            android:minHeight="48dp"
+            android:enabled="false" />
+
+        <Button
+            android:id="@+id/btnEditarLibro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="Editar"
+            android:textColor="#ffffff"
+            android:backgroundTint="#009688" />
+
+        <Button
+            android:id="@+id/btnEliminarLibro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Eliminar"
+            android:textColor="#ffffff"
+            android:backgroundTint="#FF0000" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
