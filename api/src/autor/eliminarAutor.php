@@ -1,16 +1,16 @@
 <?php
 
 // Incluir el archivo de conexión a la base de datos
-require_once 'db.php';
+require_once '../db.php';
 
 // Verificar si se proporcionó el parámetro autor_id en la URL
-if (!isset($_POST['autor_id'])) {
+$autor_id = $_GET['autor_id'] ?? null;
+
+if (!$autor_id) {
     http_response_code(400); // Bad Request
     echo json_encode(array("message" => "Falta el parámetro autor_id."));
     exit();
 }
-
-$autor_id = $_POST['autor_id'];
 
 // Query para llamar al procedimiento almacenado usp_BorrarAutor
 $query = "CALL usp_BorrarAutor(:autor_id)";
@@ -32,3 +32,4 @@ try {
     http_response_code(500); // Internal Server Error
     echo json_encode(array("message" => "No se pudo eliminar el autor. Error: " . $e->getMessage()));
 }
+?>

@@ -2,14 +2,16 @@ package com.example.ep3;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -23,6 +25,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -36,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
         // Inicialización de vistas
@@ -50,8 +52,10 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
+        // Mostrar la lista de libros al iniciar la actividad
         MostrarLibros();
 
+        // Configurar el botón para ir a la actividad de mantenimiento
         btnMantenimiento.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -59,11 +63,30 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        // Configurar el listener para el clic en los elementos de la lista
+        lstLibro.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // Obtener el libro seleccionado
+                HashMap<String, String> selectedItem = (HashMap<String, String>) parent.getItemAtPosition(position);
+                String libroId = selectedItem.get("id");
+
+                // Mostrar ID en un Toast
+                Toast.makeText(MainActivity.this, "ID del libro seleccionado: " + libroId, Toast.LENGTH_SHORT).show();
+
+                // Imprimir en la consola para verificar
+                Log.d("MainActivity", "ID del libro seleccionado: " + libroId);
+
+                // Llamar a la función para buscar el libro por su ID
+                // buscarLibro(libroId); // Comentado temporalmente para no realizar la solicitud al servicio web en este ejemplo
+            }
+        });
     }
 
-
+    // Método para obtener y mostrar la lista de libros desde el servicio web
     void MostrarLibros() {
-        String url = "http://172.17.128.1:8080/servicios_rest/biblioteca.php";
+        String url = "http://192.168.18.12/service/php/biblioteca.php";
         RequestQueue requestQueue = Volley.newRequestQueue(this);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
@@ -74,13 +97,15 @@ public class MainActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                Toast.makeText(getApplicationContext(), volleyError.toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Error al obtener la lista de libros: " + volleyError.toString(), Toast.LENGTH_LONG).show();
+                volleyError.printStackTrace();
             }
         });
 
         requestQueue.add(stringRequest);
     }
 
+    // Método para llenar el ListView con la lista de libros obtenida del servicio web
     void LLenarLista(String response) {
         try {
             JSONArray jsa = new JSONArray(response);
@@ -107,23 +132,17 @@ public class MainActivity extends AppCompatActivity {
 
             // Crear el adaptador y configurar el ListView
             ListAdapter adapter = new SimpleAdapter(MainActivity.this, arrayList, R.layout.libro_lista,
-                    new String[]{"titulo", "autor", "año_publicacion"}, // Utiliza las claves correctas del JSON aquí
-                    new int[]{R.id.txtTituloLibros, R.id.txtAutorLibros, R.id.txtAñoPublicacionLibro}); // IDs de los elementos en libro_lista.xml
+                    new String[]{"id", "titulo", "autor", "año_publicacion"}, // Claves del HashMap
+                    new int[]{R.id.txtLibro, R.id.txtTituloLibros, R.id.txtAutorLibros, R.id.txtAñoPublicacionLibro}); // IDs de los TextView en libro_lista.xml
 
             lstLibro.setAdapter(adapter);
 
-        } catch (Exception e) {
-            Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        } catch (JSONException e) {
+            Toast.makeText(getApplicationContext(), "Error al procesar la respuesta JSON", Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
     }
 
-
-
-    // Al regresar de otra actividad volvemos a cargar la Lista de Autores
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MostrarLibros();
-    }
+    // Método para buscar y mostrar los detalles de un libro por su ID
+    // Este método se puede implementar según sea necesario para realizar la solicitud al servidor y mostrar los detalles del libro
 }

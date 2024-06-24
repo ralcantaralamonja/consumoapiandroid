@@ -27,12 +27,13 @@
             android:backgroundTint="#009688"
             android:layout_gravity="center"
             android:text="Mantenimiento"/>
+
         <ListView
             android:id="@+id/lstLibro"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="10dp"
-            android:choiceMode="singleChoice"/>
+            android:choiceMode="singleChoice" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

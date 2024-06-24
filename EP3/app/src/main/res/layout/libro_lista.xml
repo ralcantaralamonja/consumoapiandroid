@@ -1,49 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/txtLibro"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textColor="#009688"
+        android:textStyle="bold"
+        android:visibility="gone" /> <!-- Este TextView almacena el ID del libro -->
 
-        <TextView
-            android:id="@+id/txtLibro"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20dp"
-            android:textColor="#009688"
-            android:textStyle="bold"
-            android:text="Libro" />
+    <TextView
+        android:id="@+id/txtTituloLibros"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Título" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+    <TextView
+        android:id="@+id/txtAutorLibros"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Autor" />
 
-            <TextView
-                android:id="@+id/txtTituloLibros"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Titulo" />
+    <TextView
+        android:id="@+id/txtAñoPublicacionLibro"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Año de Publicación" />
 
-            <TextView
-                android:id="@+id/txtAutorLibros"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Autor" />
-
-            <TextView
-                android:id="@+id/txtAñoPublicacionLibro"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Año Publicacion" />
-
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

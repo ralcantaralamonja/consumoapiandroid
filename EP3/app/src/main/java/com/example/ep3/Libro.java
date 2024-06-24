@@ -35,6 +35,7 @@ public class Libro extends AppCompatActivity {
         btnAgregar = findViewById(R.id.btnAgregarLibro);
         txtIDLibro = findViewById(R.id.txtIDLibro);
         txtTituloLibro = findViewById(R.id.txtTituloLibro);
+        txtTituloLibro =findViewById(R.id.txtTituloLibro);
         txtAutor = findViewById(R.id.txtAutorLibro);
         txtFechaPublicacion = findViewById(R.id.txtfechaPublicacion);
 
@@ -47,7 +48,7 @@ public class Libro extends AppCompatActivity {
     }
 
     void agregarLibro() {
-        String url = "http://172.17.128.1:8080/servicios_rest/agregar_libro.php"; // Asegúrate de cambiar a tu URL correcta
+        String url = "http://192.168.18.12/service/php/agregar_libro.php"; // Asegúrate de cambiar a tu URL correcta
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
@@ -76,6 +77,7 @@ public class Libro extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
+                params.put("id", txtIDLibro.getText().toString());
                 params.put("titulo", txtTituloLibro.getText().toString());
                 params.put("autor", txtAutor.getText().toString());
                 params.put("anio", txtFechaPublicacion.getText().toString()); // Asegúrate de que coincida con el nombre en PHP
@@ -86,4 +88,7 @@ public class Libro extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
+
+
+
 }
