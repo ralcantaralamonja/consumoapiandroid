@@ -182,11 +182,12 @@ public class MainActivity extends AppCompatActivity {
 
                 // Mostrar los detalles del libro en una nueva actividad o diálogo
                 Intent intent = new Intent(getApplicationContext(), DetalleLibroActivity.class);
-                intent.putExtra("id", id);
+                intent.putExtra("id", String.valueOf(id)); // Convertir int a String
                 intent.putExtra("titulo", titulo);
                 intent.putExtra("autor", autor);
                 intent.putExtra("anio", anio);
                 startActivity(intent);
+
             } else {
                 Toast.makeText(this, "Error al obtener detalles del libro", Toast.LENGTH_SHORT).show();
             }

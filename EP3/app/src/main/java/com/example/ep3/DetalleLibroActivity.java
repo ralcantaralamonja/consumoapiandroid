@@ -20,17 +20,21 @@ public class DetalleLibroActivity extends AppCompatActivity {
         txtAnio = findViewById(R.id.txtAnio);
 
         // Obtener datos del intent
+        // Obtener datos del intent
         Intent intent = getIntent();
         String id = intent.getStringExtra("id");
+        int idLibro = Integer.parseInt(id); // Convertir de String a int
+
         String titulo = intent.getStringExtra("titulo");
         String autor = intent.getStringExtra("autor");
         String anio = intent.getStringExtra("anio");
 
-        // Mostrar los datos en los TextViews
+// Mostrar los datos en los TextViews
         txtId.setText("ID: " + id);
         txtTitulo.setText("Título: " + titulo);
         txtAutor.setText("Autor: " + autor);
         txtAnio.setText("Año de Publicación: " + anio);
 
-        };
+
+    };
     }
